@@ -1,0 +1,4 @@
+Firebug is a web browser extension for Firefox. It makes it possible to, among other things, track the time of AJAX and JSON.
+
+By using Firebug it is possible to see how long the access time is for each of the APIs
+.

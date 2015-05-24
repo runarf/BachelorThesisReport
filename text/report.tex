@@ -1,0 +1,134 @@
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+\section{Introduction}
+In this bachelor thesis a program designed to make a transportation choice simpler is implemented. It is inspired by the pain I was having for choosing if I was going to wait for the bus to get home or if I should simply walk. What was quickest? And if the difference is negligible, then walking would be the healthier option.
+\section{Technical background}
+\subsection{Web application framework}
+A web application framework is used to develop dynamic websites. 
+
+Hypertext navigation, such as HTML, provides static web pages. These web pages are the same for all users. For a web page to become dynamic it needs to change in response to different contexts or conditions. A dynamic web page can be achieved by client-side scripting and server-side scripting. Client-side scripting changes the web page by executing code on the client-side. In contrast, server-side scripting executes code on a web server to create a customized response for each users request. The client-side and server-side scripting can be combined or used alone.
+
+\subsection{Ruby on Rails}
+Ruby on Rails is an open source web application framework that can be used to develop dynamic websites. It is written in the Ruby programming language. 
+
+\subsection{Application Programming Interface (API)}
+Application Programming Interface is a set of routines, protocols and tools for building software applications. There are a wide range of APIs. For example, in a programming language a library provides functions for the programmer to use. The library's API explains how to use these functions for the programmer, so that the programmer don't need to look at the implementation of the functions.
+
+\subsection{Web API}
+A web API defines the interface through which interactions happen between an enterprise and application that use its assets. For the application to get these assets from the enterprise it has to send a HTTP request over a network. This request has to contain data that uses the web API for the enterprise to understand what asset the application want. When the enterprise has received the HTTP request, it sends back a HTTP response. This HTTP response is usually in XML or JSON format.
+\subsection{Mashup}
+A mashup is a web page that uses content from more than one source to create a single new service. An  example is taking data from several web services and displaying them on a web page.
+\subsection{YQL}
+Yahoo! Query Language is designed to retrieve and manipulate data from APIs. This allows users to get data from an API and remove information that is not needed.
+\subsection{AJAX}
+Asynchronous Javascript And XML (AJAX) is a group of web development tools used client side to make asynchronous web applications. With AJAX data can be sent from the client to the server without making changes on the displayed web page. Data can also be retrieved, and the web page can be changed without needing to change the whole web page. Even though the name implies use of XML, it is common to use JSON for data exchange. Most web browsers request that data transferred by using AJAX is only transferred between the client and the server on the same domain. It is therefore not possible to transfer data between the client and a server on another domain. This is called same-origin policy, and is used to increase security.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{../ajax/ajax}
+\caption{AJAX from client to server}
+\label{AJAX}
+\end{figure}
+
+
+\subsection{JSONP}
+JSONP is a way of sending and receiving data from the client web browser to another domain, thus avoiding the same origin policy. It works by exchanging data by using <script> tags. This tag is not enforced by the same origin policy. [http://bob.ippoli.to/archives/2005/12/05/remote-json-jsonp/]
+\subsection{Firebug}
+Firebug is a web browser extension for Firefox. It makes it possible to, among other things, track the time of AJAX and JSON.
+
+\subsection{Traceroute}
+Traceroute is a computer network tool for displaying the path of packets across an IP network.
+\section{Design}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../arch/arch}
+\caption{Architecture}
+\label{arch}
+\end{figure}
+The web application uses four web APIs. Three of the APIs are accessed without going via the web server. The Google maps API is accessed by using the Google Maps javascript API. The weather data is accessed by using YQL. 
+
+All of the APIs are accessed by using either AJAX or JSONP.
+
+\subsection{Accessing the weather API}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../weather/access}
+\caption{Weather API}
+\label{weather}
+\end{figure}
+
+To get the weather data the javascript uses JSONP to request data from YQL. It provides YQL with information about the weather API and the location (steps 1 and 2). YQL requests the information from the weather API (steps 3 and 4). The weather API finds the weather data and sends it to YQL(steps 5, 6 and 7). YQL extract the data from the XML document that the client required and sends this data in JSONP format to the client (steps 8, 9 and 10).
+
+\subsection{Accessing the Public transport API}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../ruter/access}
+\caption{Public transport API}
+\label{public}
+\end{figure}
+To get the public transport information the client sends information source and destination with AJAX to the server (steps 1 and 2). The server converts the source and destination to UTM coordinates and sends a HTTP request to Ruter API (steps 3 and 4). The Ruter server finds several possible routes and sends an HTTP response back to the server (step 5, 6 and 7). The server chooses the first route and extracts the information needed and sends it using AJAX to the client (steps 8, 9 and 10).
+
+\subsection{Accessing the Google Maps API}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../google/access}
+\caption{Google Maps API}
+\label{google}
+\end{figure}
+To get information about walking, cycling and driving the client side uses the Google Maps javascript API. This API also uses JSONP for exchange of data. The client uses the source and destination as arguments in the javascript call (steps 1 and 2). The Google API server try to find one or several routes that go between the source and the destination. It then sends the route(s) in JSON format to the client (steps 3, 4 and 5).
+
+End systems are connected together by a network of communication links and packet switches. 
+End systems attached to the Internet provide an Application Programming Interface that specifies how a program running on one end system asks the Internet infrastructure to deliver data to a specific destination program running on another end system. 
+
+An optical fiber is a thin, flexible medium that conducts pulses of light, with each pulse representing a bit. 
+
+\section{Implementation}
+
+\section{Discussion}
+
+\subsection{Location of web API servers}
+By using traceroute it is possible to find the IP addresses of the web APIs used. By using a geolocation software it is possible to find the location of these IP addresses.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../traceroute/heroku_markers}
+\caption{Server on Heroku}
+\label{traceroute_heroku}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../traceroute/localhost_markers}
+\caption{Server on localhost}
+\label{traceroute_localhost}
+\end{figure}
+
+\subsection{Performance}
+By using Firebug it is possible to see how long the access time is for each of the APIs. 
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../apitimes/apitiderHeroku}
+\caption{API access time with server running remote}
+\label{time_heroku}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../apitimes/apitiderLocalhost}
+\caption{API access time with server running local}
+\label{time_localhost}
+\end{figure}
+
+\section{Conclusion}
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
