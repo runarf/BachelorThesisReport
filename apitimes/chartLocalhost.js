@@ -40,7 +40,8 @@ function drawAnnotations() {
 	bar: { groupWidth: '75%' },
 	isStacked: true,
 	vAxis: {
-	    title: 'Milliseconds'
+	    title: 'Milliseconds',
+	    maxValue: 2000
 	}
     };
     var chart_div = document.getElementById('chart_div');
