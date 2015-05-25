@@ -134,6 +134,7 @@ In figure \ref{fig:traceroute} we see that when accessing the met.no API the HTT
 In figure \ref{fig:traceroute} the Google Maps API server is accessed by sending an HTTP request from the user (marker A) to the API server (marker B). This is show as step 1 and 2 in figure \ref{fig:google}. The API server finds route suggestions and send the data back in a HTTP response to the client. This is shown as step 3, 4 and 5 in figure \ref{fig:google}.
 
 \subsection{Web server access routes}
+\label{sec:web-server-access}
 When the web server is run locally, the Ruter API server access route is shorter. As seen in figure \ref{fig:public}, the data sent in steps 1, 2, 9 and 10 travels a shorter distance. 
 \subsubsection{Accessing the Ruter.no API server}
 \paragraph{Remote web server}
@@ -145,15 +146,8 @@ In figure \ref{fig:traceroute_localhost} the client sends an HTTP request to the
 
 
 \subsection{Performance}
-By using Firebug it is possible to see how long the access time is for each of the APIs. The times vary between each HTTP request because of different congestion on the network and different server load on the API servers. The results are a result of making 10 HTTP requests and take the average of the times. 
-
-\subsubsection{Common access route performance}
-In figure \ref{fig:time} is the access time for the application when the server is run remotely (figure \ref{fig:time_heroku}) and when run locally (figure \ref{fig:time_localhost}). 
-\paragraph{Google API server access time}
-In figure \ref{fig:google} and figure \ref{fig:traceroute} the access to the Google API access one less server than the rest of the API requests. This could give a sign that the access time should be shorter than for the other API accesses. In figure \ref{fig:time} a and b we see that the access time for the Google API server is under 200 milliseconds for both. Even though the distance between the client and the Google API server is longer than the client to the other intermediary servers, the time saved by only accessing one server instead of two gives a time benefit.
-\paragraph{met.no API access time}
-In figure \ref{fig:weather} and figure \ref{fig:traceroute} it shows that the access to the met.no API server requires an intermedia server access to the YQL API server. In figure \ref{fig:time} a and b it shows that the access time is between 1000 and 1400 ms. This is more than 5 times greater than the access time to the Google API server. One of the reasons is that the data retrieval requires two server accesses. Another reason can be that either or both of the servers hosting the APIs have a slower performance than Googles.
-
+\label{sec:performance}
+By using Firebug it is possible to see how long the access time is for each of the APIs. The times vary between each HTTP request because of different congestion on the network and different server load and/or performance on the API servers. The results are a result of making 10 HTTP requests and take the average of the times. 
 \begin{figure}
 \centering
 \begin{subfigure}{\textwidth}
@@ -169,6 +163,22 @@ In figure \ref{fig:weather} and figure \ref{fig:traceroute} it shows that the ac
 \caption{API access times}
 \label{fig:time}
 \end{figure}
+
+\subsubsection{Common access route performance}
+In figure \ref{fig:time} is the access time for the application when the server is run remotely (figure \ref{fig:time_heroku}) and when run locally (figure \ref{fig:time_localhost}). 
+
+\paragraph{Google API server access time} 
+In figure \ref{fig:google} and figure \ref{fig:traceroute} the access to the Google API access one less server than the rest of the API requests. This could give a sign that the access time should be shorter than for the other API accesses. In figure \ref{fig:time} a and b we see that the access time for the Google API server is under 200 milliseconds for both. Even though the distance between the client and the Google API server is longer than the client to the other intermediary servers, the time saved by only accessing one server instead of two gives a time benefit.
+
+\paragraph{met.no API access time} 
+In figure \ref{fig:weather} and figure \ref{fig:traceroute} it shows that the access to the met.no API server requires an intermedia server access to the YQL API server. In figure \ref{fig:time} a and b it shows that the access time is between 1000 and 1400 ms. This is more than 5 times greater than the access time to the Google API server. One of the reasons is that the data retrieval requires two server accesses. Another reason can be that either or both of the servers hosting the APIs have a slower performance than Googles.
+
+\subsubsection{Web server access routes performance}
+\paragraph{Ruter.no API access time}
+In figure \ref{fig:public} and figure \ref{fig:traceroute} is shown that the access to the Ruter.no API server requires intermedia server access on the web applications server. The placement of the web application server is different as mentioned in section \ref{sec:web-server-access}. This resulted in difference in access time for accessing the Ruter.no API server, as shown in figure \ref{fig:time} a and b. When the web application server is hosted remotely on heroku the access time for the Ruter.no API is 1800 milliseconds. When it is hosted locally the access time for the Ruter.no API is 1100. Thus there is a difference in 700 milliseconds. The access time for the Ruter.no API server is divided into two sections. The server access time is 250 milliseconds. It is the same for both the server hosted locally and remotely. The reason for this can be that the server hosted locally uses more time to process the result from the Ruter.no API. The Ruter.no API access time has a difference of 700 milliseconds. The access time for the Ruter API server from the web application server was 1550 milliseconds when the server is hosted remotely, while it was 850 milliseconds when it is hosted locally. One of the reasons is that the location of the Ruter.no API server is faster to access from the clients location. 
+
+%Some of the difference can be explained by the reasons mentioned in section \ref{sec:performance}. 
+
 
 \section{Conclusion}
 \printbibliography
