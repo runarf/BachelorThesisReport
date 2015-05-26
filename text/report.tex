@@ -9,7 +9,7 @@
 \usepackage{subcaption}
 \usepackage[backend=biber]{biblatex}
 \usepackage{url}
-\bibliography{references.bib}
+\addbibresource{references.bib}
 \begin{document}
 \tableofcontents
 \newpage
@@ -18,8 +18,15 @@ In this bachelor thesis a program designed to make a transportation choice simpl
 \section{Technical background}
 \subsection{Web application framework}
 A web application framework is used to develop dynamic websites. 
+\begin{figure}[center]
+  \centering
+  \includegraphics[width=\linewidth]{../webframework/webframe}
+  \caption{Web application framework}
+  \label{fig:webapp}
+\end{figure}
 
-Hypertext navigation, such as HTML, provides static web pages. These web pages are the same for all users. For a web page to become dynamic it needs to change in response to different contexts or conditions. A dynamic web page can be achieved by client-side scripting and server-side scripting. Client-side scripting changes the web page by executing code on the client-side. In contrast, server-side scripting executes code on a web server to create a customized response for each users request. The client-side and server-side scripting can be combined or used alone.
+
+Hypertext navigation, such as HTML, provides static web pages. These web pages are the same for all users. For a web page to become dynamic it needs to change in response to different contexts or conditions. A dynamic web page can be achieved by client-side scripting (done at the client in figure \ref{fig:arch}) and server-side scripting (done at the server in figure \ref{fig:arch}). Client-side scripting changes the web page by executing code on the client-side. In contrast, server-side scripting executes code on a web server to create a customized response for each users request. The client-side and server-side scripting can be combined or used alone.
 
 \subsection{Ruby on Rails}
 Ruby on Rails is an open source web application framework that can be used to develop dynamic websites. It is written in the Ruby programming language. 
@@ -87,7 +94,7 @@ To get the public transport information the client sends information source and 
 \subsection{Accessing the Google Maps API}
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{../google/access}
+\includegraphics[width=0.6\textwidth]{../google/access}
 \caption{Google Maps API}
 \label{fig:google}
 \end{figure}
