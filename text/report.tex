@@ -14,8 +14,10 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-In this bachelor thesis a program designed to make a transportation choice simpler is implemented. It is inspired by the pain I was having for choosing if I was going to wait for the bus to get home or if I should simply walk. What was quickest? And if the difference is negligible, then walking would be the healthier option.
+The goals for this bachelor thesis is to enchance the writers skill in software development. The main theme of the thesis is working with external data through accessing web APIs and use them to create a new service. In this bachelor thesis a web application designed to make a transportation choice simpler is implemented. It is inspired by the pain I was having for choosing if I was going to wait for the bus to get home or if I should walk. The application lets the user find the difference between walking, cycling, driving or taking public transport between an origin and a destination.
 \section{Technical background}
+During the development of the web application the following technologies and tools were used.
+
 \subsection{Web application framework}
 A web application framework is used to develop dynamic websites. 
 \begin{figure}[center]
@@ -36,7 +38,7 @@ Asynchronous Javascript And XML (AJAX) is a group of web development tools used 
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{../ajax/ajax}
+\includegraphics[width=0.8\linewidth]{../ajax/ajax}
 \caption{AJAX from client to server}
 \label{AJAX}
 \end{figure}
@@ -47,11 +49,15 @@ JSONP is a way of sending and receiving data from the client web browser to anot
 
 
 \subsection{Application Programming Interface (API)}
-Application Programming Interface is a set of routines, protocols and tools for building software applications. There are a wide range of APIs. For example, in a programming language a library provides functions for the programmer to use. The library's API explains how to use these functions for the programmer, so that the programmer don't need to look at the implementation of the functions.
+Application Programming Interface is a set of routines, protocols and tools for building software applications. There are a wide range of APIs. For example, in a programming language a library provides functions for the programmer to use. The library's API explains how to use these functions for the programmer, so that the programmer don't need to look at the implementation of the functions. 
 \subsection{Mashup}
 A mashup is a web page that uses content from more than one source to create a single new service. An  example is taking data from several web services and displaying them on a web page.
 \subsection{Web API}
 A web API defines the interface through which interactions happen between an enterprise and application that use its assets. For the application to get these assets from the enterprise it has to send a HTTP request over a network. This request has to contain data that uses the web API for the enterprise to understand what asset the application want. When the enterprise has received the HTTP request, it sends back a HTTP response. This HTTP response is usually in XML or JSON format.
+
+\subsection{RESTful API}
+\label{sec:restful-api}
+REpresentational State Transfer (REST) is, among other things, a client-server architecture that uses the HTTP protocol for communication. A RESTful API is an API that uses this client-server architecture for communication. Each URL on the server represents a resource, for example: news.com/item/3. In this example the resource ``item 3'' is accessible by visiting this url. The different HTTP methods (GET, POST, PUT, DELETE) are used for operiting on the resources. Some, mostly older, web APIs are based on SOAP, which is a more complicated to use.
 
 \subsection{YQL}
 Yahoo! Query Language is designed to retrieve and manipulate data from APIs. This allows users to get data from an API and remove information that is not needed.
@@ -61,6 +67,12 @@ Firebug is a web browser extension for Firefox. It makes it possible to, among o
 \subsection{Traceroute}
 Traceroute is a computer network tool for displaying the path of packets across an IP network.
 \section{Design}
+
+\subsection{Architecture}
+\label{sec:architecture}
+
+
+
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{../arch/arch}
@@ -72,6 +84,7 @@ The web application uses four web APIs. Three of the APIs are accessed without g
 All of the APIs are accessed by using either AJAX or JSONP.
 
 \subsection{Accessing the weather API}
+\label{sec:access-weath-api}
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{../weather/access}
@@ -83,6 +96,7 @@ All of the APIs are accessed by using either AJAX or JSONP.
 To get the weather data the javascript uses JSONP to request data from YQL. It provides YQL with information about the weather API and the location (steps 1 and 2). YQL requests the information from the weather API (steps 3 and 4). The weather API finds the weather data and sends it to YQL(steps 5, 6 and 7). YQL extract the data from the XML document that the client required and sends this data in JSONP format to the client (steps 8, 9 and 10).
 
 \subsection{Accessing the Public transport API}
+\label{sec:access-publ-transp}
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{../ruter/access}
@@ -92,6 +106,7 @@ To get the weather data the javascript uses JSONP to request data from YQL. It p
 To get the public transport information the client sends information source and destination with AJAX to the server (steps 1 and 2). The server converts the source and destination to UTM coordinates and sends a HTTP request to Ruter API (steps 3 and 4). The Ruter server finds several possible routes and sends an HTTP response back to the server (step 5, 6 and 7). The server chooses the first route and extracts the information needed and sends it using AJAX to the client (steps 8, 9 and 10).
 
 \subsection{Accessing the Google Maps API}
+\label{sec:access-google-maps}
 \begin{figure}
 \centering
 \includegraphics[width=0.6\textwidth]{../google/access}
@@ -105,7 +120,59 @@ To get information about walking, cycling and driving the client side uses the G
 
 % An optical fiber is a thin, flexible medium that conducts pulses of light, with each pulse representing a bit. 
 
+\subsection{User interface}
+\label{sec:user_inter}
+
+The user interface consist of one single page. All data is exchanged using AJAX and JSONP routines. In figure \ref{fig:ux_empty} is the page that is shown to the user when the page is visited. The form lets the user enter a origin and destination location. It also lets the user restrict which type of transportation it would like to get information about. The origin and destination form fields implements an autocomplete feature that lets the user easierly find the address they want to travel from and to. \\
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{../ux/empty}
+    \caption{Empty forms}
+    \label{fig:ux_empty}    
+  \end{subfigure}
+\hfill %\qquad
+  \begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{../ux/autocomplete}
+    \caption{Autocomplete}
+\label{fig:ux_autocomplete}
+  \end{subfigure}
+  \caption{User interface}
+  \label{fig:ux_first}
+\end{figure}
+In figure \ref{fig:ux_filled} the forms are filled out by the user. When the user press the send button the data is sent to the different servers mentioned in section \ref{sec:architecture}. The application then receives data from the servers and display the output. An example is displayed in figure \ref{fig:ux_result}. The output contains an image representing the weather at the origin place. It also contains information about each of the selected transportations.
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \includegraphics[width=\textwidth]{../ux/filled}
+    \caption{Filled forms}
+    \label{fig:ux_filled}
+  \end{subfigure}
+\hfill
+\begin{subfigure}{0.4\textwidth}
+  \includegraphics[width=\textwidth]{../ux/result}
+  \caption{Search result}
+  \label{fig:ux_result}
+\end{subfigure}
+  \caption{User interface}
+  \label{fig:ux_last}
+\end{figure}
+
 \section{Implementation}
+
+\subsection{Sending data from the web application}
+\label{sec:sending-data-from}
+In this section the implementation of how data is sent from the web applications to the different servers will be explained. The explanation will describe what happens from the client click the ``send'' button until the results are displayed.
+\subsubsection{To the Google Maps javascript API}
+\label{sec:google-maps-javascr}
+When the page is loaded at the client it includes a large javascript file that contain the Google Maps javascript API. This file contains methods for using the API.
+When the client click ``send'' the a javascript event handler is executed on the client side. The javascript parses the input from the client and checks which transportation 
+
+
+\subsection{Using the Ruter.no API}
+
+\label{sec:using-ruter.no-api}
+Ruter.no provides a RESTful API. It is open for everyone who want to use it.
 
 \section{Discussion}
 
@@ -188,9 +255,10 @@ In figure \ref{fig:public} and figure \ref{fig:traceroute} is shown that the acc
 
 
 \section{Conclusion}
-\printbibliography
+%\printbibliography
 \end{document}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+
