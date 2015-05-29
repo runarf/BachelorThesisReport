@@ -20,8 +20,7 @@
           <y:Geometry height="45.56999588012695" width="67.49800109863281" x="244.2509994506836" y="196.21500205993652"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="14" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="36.59375" modelName="custom" textColor="#000000" visible="true" width="101.849609375" x="-17.175804138183594" y="49.56999588012695">client visiting 
-domain.com<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="36.958984375" x="15.269508361816406" y="49.56999588012695">client<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -41,7 +40,7 @@ domain.com<y:LabelModel>
           <y:Geometry height="56.231998443603516" width="35.095298767089844" x="560.4523506164551" y="86.88400077819824"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="78.384765625" x="-21.644733428955078" y="60.231998443603516">domain.com<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="115.392578125" x="-40.14863967895508" y="60.231998443603516">same-domain.com<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>

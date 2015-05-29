@@ -9,7 +9,12 @@
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{color}
-\usepackage[backend=biber]{biblatex}
+\usepackage{hyperref}
+\usepackage[
+backend=biber,
+style=numeric,
+sorting=ynt
+]{biblatex}
 \usepackage{url}
 \addbibresource{references.bib}
 
@@ -57,61 +62,90 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-The goals for this bachelor thesis is to enchance the writers skill in software development. The main theme of the thesis is working with external data through accessing web APIs and use them to create a new service. In this bachelor thesis a web application designed to make a transportation choice simpler is implemented. It is inspired by the pain I was having for choosing if I was going to wait for the bus to get home or if I should walk. The application lets the user find the difference between walking, cycling, driving or taking public transport between an origin and a destination.
+The goals for this bachelor thesis is to enchance the writers skill in software development. The main theme of the thesis is working with external data through accessing web APIs and use them to create a new service. In this bachelor thesis a web application designed to make a transportation choice simpler is implemented. It is inspired by the pain I was having for choosing if I was going to wait for the bus to get home or if I should walk. The application lets the user find the difference in time between walking, cycling, driving or taking public transport between an origin and a destination. It also provides weather information to make it easier to decide what transportation to choose.
 \section{Technical background}
-During the development of the web application the following technologies and tools were used.
+The focus for this bachelor thesis is on obtaining data from different sources and presenting them in a useful way for a user. To achieve this the thesis is based on different technologies. This enables us to experience and compare the different technologies explained in this section.
+%During the development of the web application the following technologies and tools were used.
 
 \subsection{Web application framework}
 A web application framework is used to develop dynamic websites. 
 \begin{figure}[center]
   \centering
-  \includegraphics[width=\linewidth]{../webframework/webframe}
-  \caption{Web application framework}
+  \includegraphics[width=0.5\linewidth]{../webframework/webframe}
+  \caption{Client and server in a web application context}
   \label{fig:webapp}
 \end{figure}
 
 
-Hypertext navigation, such as HTML, provides static web pages. These web pages are the same for all users. For a web page to become dynamic it needs to change in response to different contexts or conditions. A dynamic web page can be achieved by client-side scripting (done at the client in figure \ref{fig:arch}) and server-side scripting (done at the server in figure \ref{fig:arch}). Client-side scripting changes the web page by executing code on the client-side. In contrast, server-side scripting executes code on a web server to create a customized response for each users request. The client-side and server-side scripting can be combined or used alone.
+Hypertext navigation, such as HTML, provides static web pages. These web pages are the same for all users. For a web page to become dynamic it needs to change in response to different contexts or conditions. A dynamic web page can be achieved by client-side scripting (done at the client in figure \ref{fig:arch}) and server-side scripting (done at the server in figure \ref{fig:arch}). Client-side scripting changes the web page by executing code on the client-side. In contrast, server-side scripting executes code on a web server to create a customized response for each users request. The client-side and server-side scripting can be combined or used alone. \cite{webapp}
 
 \subsection{Ruby on Rails}
-Ruby on Rails is an open source web application framework that can be used to develop dynamic websites. It is written in the Ruby programming language. 
+Ruby on Rails is an open source web application framework that can be used to develop dynamic websites. It is written in the Ruby programming language. \cite{rubyrails}
 
 \subsection{AJAX}
-Asynchronous Javascript And XML (AJAX) is a group of web development tools used client side to make asynchronous web applications. With AJAX data can be sent from the client to the server without making changes on the displayed web page. Data can also be retrieved, and the web page can be changed without needing to change the whole web page. Even though the name implies use of XML, it is common to use JSON for data exchange. Most web browsers request that data transferred by using AJAX is only transferred between the client and the server on the same domain. It is therefore not possible to transfer data between the client and a server on another domain. This is called same-origin policy, and is used to increase security.
+Asynchronous Javascript And XML (AJAX) is a group of web development tools used client side to make asynchronous web applications. With AJAX data can be sent from the client to the server without making changes on the displayed web page. Data can also be retrieved, and the web page can be changed without needing to change the whole web page. Even though the name implies use of XML, it is common to use JSON for data exchange \cite{ajax}.
+
+
+
+\subsection{Same-origin policy}
+Most web browsers request that data transferred by using AJAX is only transferred between the client and the server on the same domain. It is therefore not possible to transfer data between the client and a server on another domain. This is called same-origin policy, and is used to increase security. In figure \ref{fig:sameorigin} it is illustrated how the policy works. The client can send AJAX to the web server that has the same domain as the client is visiting. If the client try to send regular AJAX to another server, the data will not come through and get lost. \cite{sameorigin}
+
+
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{../ajax/ajax}
-\caption{AJAX from client to server}
-\label{AJAX}
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[width=\textwidth]{../ajax/ajax}
+\caption{Same-origin policy}
+\label{fig:sameorigin}
+\end{subfigure}
+\begin{subfigure}{0.45\textwidth}
+\includegraphics[width=\textwidth]{../jsonp/jsonp}
+\caption{JSONP}
+\label{fig:jsonp}
+\end{subfigure}
 \end{figure}
 
-
 \subsection{JSONP}
-JSONP is a way of sending and receiving data from the client web browser to another domain, thus avoiding the same origin policy. It works by exchanging data by using <script> tags. This tag is not enforced by the same origin policy. [http://bob.ippoli.to/archives/2005/12/05/remote-json-jsonp/]
+
+JSONP is a way of sending and receiving data from the client web browser to another domain, thus avoiding the same origin policy. It works by exchanging data by using $\langle$ script $\rangle$ tags. This tag is not enforced by the same origin policy, as shown in figure \ref{fig:jsonp}.\cite{jsonp}
 
 
 \subsection{Application Programming Interface (API)}
-Application Programming Interface is a set of routines, protocols and tools for building software applications. There are a wide range of APIs. For example, in a programming language a library provides functions for the programmer to use. The library's API explains how to use these functions for the programmer, so that the programmer don't need to look at the implementation of the functions. 
+Application Programming Interface is a set of routines, protocols and tools for building software applications. There are a wide range of APIs. For example, in a programming language a library provides functions for the programmer to use. The library's API explains how to use these functions for the programmer, so that the programmer don't need to look at the implementation of the functions. \cite{api}
 \subsection{Mashup}
-A mashup is a web page that uses content from more than one source to create a single new service. An  example is taking data from several web services and displaying them on a web page.
+A mashup is a web page that uses content from more than one source to create a single new service. An  example is taking data from several web services and displaying them on a web page. \cite{mashup}
 \subsection{Web API}
-A web API defines the interface through which interactions happen between an enterprise and application that use its assets. For the application to get these assets from the enterprise it has to send a HTTP request over a network. This request has to contain data that uses the web API for the enterprise to understand what asset the application want. When the enterprise has received the HTTP request, it sends back a HTTP response. This HTTP response is usually in XML or JSON format.
+A web API defines the interface through which interactions happen between an enterprise and application that use its assets. For the application to get these assets from the enterprise it has to send a HTTP request over a network. This request has to contain data that uses the web API for the enterprise to understand what asset the application want. When the enterprise has received the HTTP request, it sends back a HTTP response. This HTTP response is usually in XML or JSON format. \cite{webapi}
 
 \subsection{RESTful API}
 \label{sec:restful-api}
-REpresentational State Transfer (REST) is, among other things, a client-server architecture that uses the HTTP protocol for communication. A RESTful API is an API that uses this client-server architecture for communication. Each URL on the server represents a resource, for example: news.com/item/3. In this example the resource ``item 3'' is accessible by visiting this url. The different HTTP methods (GET, POST, PUT, DELETE) are used for operiting on the resources. Some, mostly older, web APIs are based on SOAP, which is a more complicated to use.
+REpresentational State Transfer (REST) is, among other things, a client-server architecture that uses the HTTP protocol for communication. A RESTful API is an API that uses this client-server architecture for communication. Each URL on the server represents a resource, for example: news.com/item/3. In this example the resource ``item 3'' is accessible by visiting this url. The different HTTP methods (GET, POST, PUT, DELETE) are used for operiting on the resources. Some, mostly older, web APIs are based on SOAP, which is a more complicated to use.\cite{rest}
 
 \subsection{YQL}
-Yahoo! Query Language is designed to retrieve and manipulate data from APIs. This allows users to get data from an API and remove information that is not needed.
+Yahoo! Query Language is designed to retrieve and manipulate data from APIs. This allows users to get data from an API and remove information that is not needed. \cite{yql}
+
+\subsection{Ruter.no API}
+\label{sec:ruter.no-api}
+Ruter is the public transport authority for Oslo and Akershus\cite{ruterinfo}. With their API they provide access to real time data for all public transportation in Oslo and Akershus.
+
+\subsection{met.no API}
+\label{sec:met.no-api-1}
+Norwegian Meterological Institute (MET norway) provides weather forecasts for Norway. They provide free access to the weather data through their API. \cite{metnoinfo}
+
+\subsection{Google Maps javascript API}
+\label{sec:google-maps-javascr-1}
+Google Maps is a service from Google. It provides, among other things, a route planning tool. This tool can be accessed by using the Google Maps javascript API. The API is free for commercial use, with some restrictions. \cite{gmapsinfo}
+
 \subsection{Firebug}
-Firebug is a web browser extension for Firefox. It makes it possible to, among other things, track the time of AJAX and JSON.
+Firebug is a web browser extension for Firefox. It makes it possible to, among other things, track the time of AJAX and JSON. \cite{firebug}
 
 \subsection{Traceroute}
-Traceroute is a computer network tool for displaying the path of packets across an IP network.
+Traceroute is a computer network tool for displaying the path of packets across an IP network. \cite{traceroute}
 \section{Design}
+In this section the method of getting the data is explained. I gave my application the name ``Kostr'', which is the norse translation of choice.
 
-\subsection{Architecture}
+\subsection{Obtaining data}
 \label{sec:architecture}
 
 
@@ -122,11 +156,20 @@ Traceroute is a computer network tool for displaying the path of packets across 
 \caption{Architecture}
 \label{fig:arch}
 \end{figure}
-The web application uses four web APIs. Three of the APIs are accessed without going via the web server. The Google maps API is accessed by using the Google Maps javascript API. The weather data is accessed by using YQL. 
 
-All of the APIs are accessed by using either AJAX or JSONP.
+Below is a list of all the servers that the application uses to create the mashup service. All of the servers in the list are found in figure \ref{fig:arch}.
 
-\subsection{Accessing the weather API}
+\begin{itemize}
+\item YQL server. Used to access the met.no server.\cite{yql}
+\item met.no server. Used to get weather data.\cite{metno}
+\item Google Maps server. Used to get walking, cycling and driving data.\cite{gmaps}
+\item Ruter.no server. Used to get public transport data.\cite{ruter}
+\item Kostr server. Used to access the Ruter.no server and to host the Kostr website.
+\end{itemize}
+
+The four first servers in the list are external servers that is not maintained by the application. The fifth server is maintained by the application. All the external servers are accessed by using a web API defined by the companies in control of the servers. All of the servers are accessed by using either AJAX or JSONP.
+
+\subsubsection{Accessing the met.no server}
 \label{sec:access-weath-api}
 \begin{figure}
 \centering
@@ -136,9 +179,9 @@ All of the APIs are accessed by using either AJAX or JSONP.
 \label{fig:weather}
 \end{figure}
 
-To get the weather data the javascript uses JSONP to request data from YQL. It provides YQL with information about the weather API and the location (steps 1 and 2). YQL requests the information from the weather API (steps 3 and 4). The weather API finds the weather data and sends it to YQL(steps 5, 6 and 7). YQL extract the data from the XML document that the client required and sends this data in JSONP format to the client (steps 8, 9 and 10).
+To get weather data the application uses javascript that runs on the client side. The javascript uses JSONP to request data from YQL. In figure \ref{fig:weather} the steps taken to get the data is illustrated. It provides YQL with information that is needed to get the correct data from the met.no server (steps 1 and 2). YQL requests the information from the weather API (steps 3 and 4). The weather API finds the weather data and sends it to YQL(steps 5, 6 and 7). YQL extract the data from the XML document that YQL required and sends this data in JSONP format to the client (steps 8, 9 and 10).
 
-\subsection{Accessing the Public transport API}
+\subsubsection{Accessing the Ruter.no server}
 \label{sec:access-publ-transp}
 \begin{figure}
 \centering
@@ -146,9 +189,9 @@ To get the weather data the javascript uses JSONP to request data from YQL. It p
 \caption{Public transport API}
 \label{fig:public}
 \end{figure}
-To get the public transport information the client sends information source and destination with AJAX to the server (steps 1 and 2). The server converts the source and destination to UTM coordinates and sends a HTTP request to Ruter API (steps 3 and 4). The Ruter server finds several possible routes and sends an HTTP response back to the server (step 5, 6 and 7). The server chooses the first route and extracts the information needed and sends it using AJAX to the client (steps 8, 9 and 10).
+To get the public transport information the client need to access the Ruter.no server. The steps required to get the information is shown in figure \ref{fig:public}. It sends the origin and destination location to the Kostr server by using AJAX (steps 1 and 2). The server converts the source and destination to UTM coordinates and sends an HTTP request to Ruter API (steps 3 and 4). The Ruter server finds several possible routes and sends an HTTP response back to the server (step 5, 6 and 7). The server chooses the first route and extracts the information needed and sends it using AJAX to the client (steps 8, 9 and 10).
 
-\subsection{Accessing the Google Maps API}
+\subsubsection{Accessing the Google Maps server}
 \label{sec:access-google-maps}
 \begin{figure}
 \centering
@@ -156,7 +199,7 @@ To get the public transport information the client sends information source and 
 \caption{Google Maps API}
 \label{fig:google}
 \end{figure}
-To get information about walking, cycling and driving the client side uses the Google Maps javascript API. This API also uses JSONP for exchange of data. The client uses the source and destination as arguments in the javascript call (steps 1 and 2). The Google API server try to find one or several routes that go between the source and the destination. It then sends the route(s) in JSON format to the client (steps 3, 4 and 5).
+To get information about walking, cycling and driving the javascript on client side uses the Google Maps javascript API. The steps required to get the information is shown in figure \ref{fig:google}. This API also uses JSONP for exchange of data. The client uses the source and destination as arguments in the javascript call (steps 1 and 2). The Google API server try to find one or several routes that go between the source and the destination requested by the client. It then sends the route(s) in JSON format to the client (steps 3, 4 and 5).
 
 % End systems are connected together by a network of communication links and packet switches. 
 % End systems attached to the Internet provide an Application Programming Interface that specifies how a program running on one end system asks the Internet infrastructure to deliver data to a specific destination program running on another end system. 
@@ -166,7 +209,7 @@ To get information about walking, cycling and driving the client side uses the G
 \subsection{User interface}
 \label{sec:user_inter}
 
-The user interface consist of one single page. All data is exchanged using AJAX and JSONP routines. In figure \ref{fig:ux_empty} is the page that is shown to the user when the page is visited. The form lets the user enter a origin and destination location. It also lets the user restrict which type of transportation it would like to get information about. The origin and destination form fields implements an autocomplete feature that lets the user easierly find the address they want to travel from and to. \\
+The user interface consist of one single page. This is accomplished by exchanging all data using AJAX and JSONP routines. Figure \ref{fig:ux_empty} shows the page the client sees when visiting the website with the application. The website has a form that lets the client enter a origin and destination location. It also lets the client restrict which type of transportation it would like to get information about. The origin and destination form fields implements an autocomplete feature that lets the user easierly find the address they want to travel from and to, as shown in figure \ref{fig:ux_autocomplete}. \\
 \begin{figure}[h]
   \centering
   \begin{subfigure}{0.4\textwidth}
@@ -183,7 +226,7 @@ The user interface consist of one single page. All data is exchanged using AJAX 
   \caption{User interface}
   \label{fig:ux_first}
 \end{figure}
-In figure \ref{fig:ux_filled} the forms are filled out by the user. When the user press the send button the data is sent to the different servers mentioned in section \ref{sec:architecture}. The application then receives data from the servers and display the output. An example is displayed in figure \ref{fig:ux_result}. The output contains an image representing the weather at the origin place. It also contains information about each of the selected transportations.
+In figure \ref{fig:ux_filled} the forms are filled out by the user. When the user press the send button the data is sent to the different servers mentioned in section \ref{sec:architecture}. The application then receives data from the servers and display the output. An example is displayed in figure \ref{fig:ux_result}. The output contains an image representing the weather at the origin place, shown on top of the figure. It also contains information about each of the selected transportations. To the left of the walking, cycling and driving information is a link the client can click to get the directions displayed on http://maps.google.com.
 \begin{figure}[h]
   \centering
   \begin{subfigure}{0.4\textwidth}
@@ -203,9 +246,9 @@ In figure \ref{fig:ux_filled} the forms are filled out by the user. When the use
 
 \section{Implementation}
 
-\subsection{Sending data from the web application}
+\subsection{Exchanging data from the web application ...}
 \label{sec:sending-data-from}
-In this section the implementation of how data is sent from the web applications to the different servers will be explained. The explanation will describe what happens from the client click the ``send'' button until the results are displayed. In listing \ref{lst:event} is an overview of what happens when the 'send' button is pressed. (All listings in this section does not give the complete implementation and is simplified to give the reader a better understanding.)
+In this section the implementation of how data is exchanged between the web applications to the different servers will be explained. The explanation will describe what happens from the client click the ``send'' button until the results are displayed. In listing \ref{lst:event} is an overview of what happens when the 'send' button is pressed. (All listings in this section does not give the complete implementation and is simplified to give the reader a better understanding.)
 
 \begin{lstlisting}[caption=Event handler, label=lst:event]
 jQuery.('send').click(function () {
@@ -215,7 +258,7 @@ jQuery.('send').click(function () {
 });
   
 \end{lstlisting}
-\subsubsection{To the Google Maps javascript API}
+\subsubsection{to the Google Maps server}
 \label{sec:google-maps-javascr}
 When the page is loaded at the client it includes a large javascript file that contain the Google Maps javascript API. This file contains methods for using the API.
 When the client click ``send'' the a javascript event handler is executed on the client side. The event handler executes the function that creates a request and sends it to the Google Maps API server by using the function at line \ref{googlecall} in listing \ref{lst:google}. When the response is received, the callback function is  executed. It calculates the time for when the client is to arrive and then displays the information to the client.
@@ -236,12 +279,17 @@ function getGoogleRoutes(origin, destination) {
   
 \end{lstlisting}
 
+\subsubsection{to the met.no server}
+\label{sec:met.no-api}
+
+
+
 
 
 \subsection{Using the Ruter.no API}
 
 \label{sec:using-ruter.no-api}
-Ruter.no provides a RESTful API. It is open for everyone who want to use it.
+Ruter.no provides a RESTful API. It is open for everyone who want to use it. 
 
 \section{Discussion}
 
@@ -324,7 +372,7 @@ In figure \ref{fig:public} and figure \ref{fig:traceroute} is shown that the acc
 
 
 \section{Conclusion}
-%\printbibliography
+\printbibliography
 \end{document}
 %%% Local Variables:
 %%% mode: latex
