@@ -22,6 +22,8 @@ sorting=ynt
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 
+\lstloadlanguages{Ruby}
+
 \lstdefinelanguage{JavaScript}{
   keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
   keywordstyle=\color{blue}\bfseries,
@@ -53,6 +55,7 @@ sorting=ynt
    captionpos=b,
    escapeinside={(*@}{@*)}
 }
+
 
 \lstnewenvironment{snippet}[1][]
     {\lstset{float=htpb,#1}} 
@@ -136,6 +139,10 @@ Norwegian Meterological Institute (MET norway) provides weather forecasts for No
 \subsection{Google Maps javascript API}
 \label{sec:google-maps-javascr-1}
 Google Maps is a service from Google. It provides, among other things, a route planning tool. This tool can be accessed by using the Google Maps javascript API. The API is free for commercial use, with some restrictions. \cite{gmapsinfo}
+
+\subsection{Heroku}
+\label{sec:heroku}
+Heroku is a Platform as a service (PaaS)\cite{herokuinfo}. This means it provide a platform that allows customers to develop, run and manage web applications without the complexity that is normally associated with launching the application online\cite{paas}.
 
 \subsection{Firebug}
 Firebug is a web browser extension for Firefox. It makes it possible to, among other things, track the time of AJAX and JSON. \cite{firebug}
@@ -248,10 +255,10 @@ In figure \ref{fig:ux_filled} the forms are filled out by the user. When the use
 
 \subsection{Exchanging data from the web application ...}
 \label{sec:sending-data-from}
-In this section the implementation of how data is exchanged between the web applications to the different servers will be explained. The explanation will describe what happens from the client click the ``send'' button until the results are displayed. In listing \ref{lst:event} is an overview of what happens when the 'send' button is pressed. (All listings in this section does not give the complete implementation and is simplified to give the reader a better understanding.)
+In this section the implementation of how data is exchanged between the web applications to the different servers will be explained. The explanation will describe what happens from the client click the ``send'' button until the results are displayed. In listing \ref{lst:event} is an overview of what happens when the 'send' button is pressed. When the client click ``send'' the a javascript event handler (line \ref{event_handler}) is executed on the client side. The event handler executes the functions that perform the exchange of data between the servers. (All listings in this section does not give the complete implementation and is simplified to give the reader a better understanding.)
 
 \begin{lstlisting}[caption=Event handler, label=lst:event]
-jQuery.('send').click(function () {
+jQuery.('send').click(function () { (*@\label{event_handler}@*)
   ajaxToWebServer(origin, destination);
   getGoogleRoutes(origin, destination);
   getWeatherInfo(origin);
@@ -281,20 +288,62 @@ function getGoogleRoutes(origin, destination) {
 
 \subsubsection{to the met.no server}
 \label{sec:met.no-api}
+The 
+\begin{lstlisting}[caption=Using YQL API and met.no API to access met.no server, label=lst:metno]
+function callback(data) {
+  var weather = parseYqlResult(data);
+  displayWeather(weather);
+}
 
+function getWeatherInfo(origin) {
+  var locationOfOrigin = getLocationOfOrigin(origin);
+  var metRestUrl = "http://api.met.no/weatherapi/locationforecast/1.9/?";
+  var baseUrl = "http://query.yahooapis.com/v1/public/yql?q=";
+  var query = "select * from xml where url=";
+  
+  var url = baseUrl + query + metRestUrl + locationOfOrigin;
+  jQuery.getJSON(url, callback);
+}
 
-
-
-
+\end{lstlisting}
 \subsection{Using the Ruter.no API}
-
 \label{sec:using-ruter.no-api}
-Ruter.no provides a RESTful API. It is open for everyone who want to use it. 
+
+
+\begin{lstlisting}[caption=Using Ruter.no API to access Ruter.no server, label=lst:ruter, language=Ruby]
+class Ruter
+	def self.getRoute(query)
+		return get('/travel/gettravels/', query: query)
+	end
+end
+
+class TripsController < ApplicationController
+
+    def create(parameters)
+      utmLocations = convertToUTM(parameters)
+      query = makeRuterQuery(utmLocations)
+      trip = Ruter.getRoute(query)
+      trip.metadata = calculateMetadata(trip)
+      trip.save #save to database
+      
+      sendWithAjaxToClient(tripToHtml(trip))
+    end
+end
+\end{lstlisting}
+
+
 
 \section{Discussion}
 
 \subsection{Location of web API servers}
-By using traceroute it is possible to find the IP addresses of the web APIs used. By using a geolocation software it is possible to find the location of these IP addresses. In figure \ref{fig:traceroute_heroku} the server is hosted by Heroku. In figure \ref{fig:traceroute_localhost} the web server is hosted on the client computer. 
+By using traceroute it is possible to find the IP addresses of the servers that the web APIs access. By using a geolocation software it is possible to find the location of these IP addresses. In figure \ref{fig:traceroute_heroku} the server is hosted by Heroku. In figure \ref{fig:traceroute_localhost} the web server is hosted on the client computer. In the list below is the explanation of each letter on the map:
+\begin{itemize}
+\item A is the client and the Kostr server when run locally.
+\item B is the Google Maps server.
+\item C is the YQL server.
+\item D is Kostr server when run remotely on Heroku.
+\item E is the Ruter server and the met.no server.
+\end{itemize}
 
 \begin{figure}
 \centering
@@ -341,37 +390,30 @@ In figure \ref{fig:traceroute_localhost} the client sends an HTTP request to the
 By using Firebug it is possible to see how long the access time is for each of the APIs. The times vary between each HTTP request because of different congestion on the network and different server load and/or performance on the API servers. The results are a result of making 10 HTTP requests and take the average of the times. 
 \begin{figure}
 \centering
-\begin{subfigure}{\textwidth}
-\includegraphics[width=\textwidth]{../apitimes/apitiderHeroku}
-\caption{API access time with server running remote}
-\label{fig:time_heroku}
-\end{subfigure}
-\begin{subfigure}{\textwidth}
-\includegraphics[width=\textwidth]{../apitimes/apitiderLocalhost}
-\caption{API access time with server running local}
-\label{fig:time_localhost}
-\end{subfigure}
+\includegraphics[width=\textwidth]{../apitimes/apitider}
 \caption{API access times}
 \label{fig:time}
 \end{figure}
 
 \subsubsection{Common access route performance}
-In figure \ref{fig:time} is the access time for the application when the server is run remotely (figure \ref{fig:time_heroku}) and when run locally (figure \ref{fig:time_localhost}). 
+In figure \ref{fig:time} is the access time for the application when the server is run remotelyand when run locally.
 
 \paragraph{Google API server access time} 
-In figure \ref{fig:google} and figure \ref{fig:traceroute} the access to the Google API access one less server than the rest of the API requests. This could give a sign that the access time should be shorter than for the other API accesses. In figure \ref{fig:time} a and b we see that the access time for the Google API server is under 200 milliseconds for both. Even though the distance between the client and the Google API server is longer than the client to the other intermediary servers, the time saved by only accessing one server instead of two gives a time benefit.
+In figure \ref{fig:google} and figure \ref{fig:traceroute} the access to the Google API access one less server than the rest of the API requests. This could give a sign that the access time should be shorter than for the other API accesses. In figure \ref{fig:time} we see that the access time for the Google API server is under 200 milliseconds. Even though the distance between the client and the Google API server is longer than the client to the other intermediary servers, the time saved by only accessing one server instead of two gives a time benefit.
 
 \paragraph{met.no API access time} 
-In figure \ref{fig:weather} and figure \ref{fig:traceroute} it shows that the access to the met.no API server requires an intermedia server access to the YQL API server. In figure \ref{fig:time} a and b it shows that the access time is between 1000 and 1400 ms. This is more than 5 times greater than the access time to the Google API server. One of the reasons is that the data retrieval requires two server accesses. Another reason can be that either or both of the servers hosting the APIs have a slower performance than Googles.
+In figure \ref{fig:weather} and figure \ref{fig:traceroute} it shows that the access to the met.no API server requires an intermedia server access to the YQL API server. In figure \ref{fig:time} it shows that the access time is 1000. This is more than 5 times greater than the access time to the Google API server. One of the reasons is that the data retrieval requires two server accesses. Another reason can be that either or both of the servers hosting the APIs have a slower performance than Googles.
 
 \subsubsection{Web server access routes performance}
 \paragraph{Ruter.no API access time}
-In figure \ref{fig:public} and figure \ref{fig:traceroute} is shown that the access to the Ruter.no API server requires intermedia server access on the web applications server. The placement of the web application server is different as mentioned in section \ref{sec:web-server-access}. This resulted in difference in access time for accessing the Ruter.no API server, as shown in figure \ref{fig:time} a and b. When the web application server is hosted remotely on heroku the access time for the Ruter.no API is 1800 milliseconds. When it is hosted locally the access time for the Ruter.no API is 1100. Thus there is a difference in 700 milliseconds. The access time for the Ruter.no API server is divided into two sections. The server access time is 250 milliseconds. It is the same for both the server hosted locally and remotely. The reason for this can be that the server hosted locally uses more time to process the result from the Ruter.no API. The Ruter.no API access time has a difference of 700 milliseconds. The access time for the Ruter API server from the web application server was 1550 milliseconds when the server is hosted remotely, while it was 850 milliseconds when it is hosted locally. One of the reasons is that the location of the Ruter.no API server is faster to access from the clients location. 
+In figure \ref{fig:public} and figure \ref{fig:traceroute} is shown that the access to the Ruter.no API server requires intermedia server access on the web applications server. The placement of the web application server is different as mentioned in section \ref{sec:web-server-access}. This resulted in difference in access time for accessing the Ruter.no API server, as shown in figure \ref{fig:time}. When the web application server is hosted remotely on heroku the access time for the Ruter.no API is 1800 milliseconds. When it is hosted locally the access time for the Ruter.no API is 1100. Thus there is a difference in 700 milliseconds. The access time for the Ruter.no API server is divided into two sections. The server access time is 250 milliseconds. It is the same for both the server hosted locally and remotely. The reason for this can be that the server hosted locally uses more time to process the result from the Ruter.no API. The Ruter.no API access time has a difference of 700 milliseconds. The access time for the Ruter API server from the web application server was 1550 milliseconds when the server is hosted remotely, while it was 850 milliseconds when it is hosted locally. One of the reasons is that the location of the Ruter.no API server is faster to access from the clients location. 
 
 %Some of the difference can be explained by the reasons mentioned in section \ref{sec:performance}. 
 
 
 \section{Conclusion}
+
+\newpage
 \printbibliography
 \end{document}
 %%% Local Variables:
